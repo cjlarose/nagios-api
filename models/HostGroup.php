@@ -5,5 +5,5 @@ class HostGroup extends ActiveRecord\Model {
 
 	static $primary_key = 'hostgroup_id';
 
-	static $has_many = array();
+	//static $has_many = array();
 }

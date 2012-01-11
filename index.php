@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 
 require_once BASE_PATH . 'RestUtils.php';
 require_once BASE_PATH . 'RestRequest.php';
-require_once BASE_PATH . 'bootstrap.php';
+require_once BASE_PATH . 'utils.php';
 
 if (count($_GET) > 0) {
 	$get_keys = array_keys($_GET);
@@ -41,10 +41,12 @@ if (count($_GET) > 0) {
 	$action = 'view';
 	$params = array('welcome');
 }
-pr($controller, $action, $params, BASE_PATH);
+//pr($controller, $action, $params, BASE_PATH);
 
 include BASE_PATH . 'controller.php';
 include BASE_PATH . "controllers/{$controller}_controller.php";
+include BASE_PATH . 'php-activerecord/ActiveRecord.php';
+
 $controller_name = ucfirst($controller) . "Controller";
 $controller_instance = new $controller_name;
 $controller_instance->set_request(array('controller' => $controller, 'action' => $action, 'params' => $params));

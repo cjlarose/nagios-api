@@ -1,40 +1,54 @@
 <?php
-
-define('BASE_DIR', dirname(__FILE__) . '/');
-
-require_once BASE_DIR . 'php-activerecord/ActiveRecord.php';
-
-ActiveRecord\Config::initialize(function($cfg) {
-
-	$cfg->set_model_directory('models');
-	$cfg->set_connections(array(
-		'development' => 'mysql://nagiosapi:nagiosapi@localhost/ndoutils',
-		'production' => 'mysql://nagios:nagios@localhost/nagios'
-	));
-
-});
-
-$hosts = Host::find('all');
-
-//echo "<pre>";
-//var_dump($hosts);
-//echo "</pre>";
-
-//header('Cache-Control: no-cache, must-revalidate');
-//header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-//header('Content-type: application/json');
-require_once 'RestUtils.php';
-require_once 'RestRequest.php';
-$data = RestUtils::processRequest();
-
-switch($data->getMethod()) {
-	case 'get':
-		$result_string = "[";
-		$host_json_array = array();
-		foreach ($hosts as $host)
-			$host_json_array[] = $host->to_json();
-		$result_string .= implode(',', $host_json_array);
-		$result_string .= "]";
-		RestUtils::sendResponse(200, $result_string, 'application/json');
-		break;
+define('BASE_PATH',  dirname(__FILE__) . "/");
+define('HOME_URL', "http://vm142-26.iplantcollaborative.org/nagios-api/");
+function home_url($url) {
+	return HOME_URL . $url;
 }
+error_reporting(E_ALL);
+
+require_once BASE_PATH . 'RestUtils.php';
+require_once BASE_PATH . 'RestRequest.php';
+require_once BASE_PATH . 'bootstrap.php';
+
+if (count($_GET) > 0) {
+	$get_keys = array_keys($_GET);
+	$path = $get_keys[0];
+	if (substr($path, 0, 1) == "/") {
+		$path = substr($path, 1);
+	}
+	$data = explode('/', $path);
+	//pr($data);
+	if (array_key_exists(0, $data)) {
+		$controller = $data[0];
+	} else {
+		$controller = 'pages';
+	}
+
+	if (array_key_exists(1, $data)) {
+		$action = $data[1];
+	} else {
+		$action = 'index';
+	}
+	
+	if (array_key_exists(2, $data)) {
+		$params = array_slice($data, 2);
+	} else {
+		$params = array();
+	}
+
+} else {
+	$controller = 'pages';
+	$action = 'view';
+	$params = array('welcome');
+}
+pr($controller, $action, $params, BASE_PATH);
+
+include BASE_PATH . 'controller.php';
+include BASE_PATH . "controllers/{$controller}_controller.php";
+$controller_name = ucfirst($controller) . "Controller";
+$controller_instance = new $controller_name;
+$controller_instance->set_request(array('controller' => $controller, 'action' => $action, 'params' => $params));
+call_user_func_array(array($controller_instance, $action), $params);
+//call_user_func(array($controller_instance, 'render'));
+//	include(BASE_PATH . "welcome.php");
+?>

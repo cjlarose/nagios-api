@@ -20,14 +20,21 @@ $hosts = Host::find('all');
 //var_dump($hosts);
 //echo "</pre>";
 
-header('Cache-Control: no-cache, must-revalidate');
-header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-header('Content-type: application/json');
+//header('Cache-Control: no-cache, must-revalidate');
+//header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+//header('Content-type: application/json');
+require_once 'RestUtils.php';
+require_once 'RestRequest.php';
+$data = RestUtils::processRequest();
 
-$result_string = "[";
-$host_json_array = array();
-foreach ($hosts as $host)
-	$host_json_array[] = $host->to_json();
-$result_string .= implode(',', $host_json_array);
-$result_string .= "]";
-echo $result_string;
+switch($data->getMethod()) {
+	case 'get':
+		$result_string = "[";
+		$host_json_array = array();
+		foreach ($hosts as $host)
+			$host_json_array[] = $host->to_json();
+		$result_string .= implode(',', $host_json_array);
+		$result_string .= "]";
+		RestUtils::sendResponse(200, $result_string, 'application/json');
+		break;
+}

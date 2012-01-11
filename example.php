@@ -9,9 +9,10 @@ ActiveRecord\Config::initialize(function($cfg) {
 	$cfg->set_model_directory('models');
 	$cfg->set_connections(array(
 		'development' => 'mysql://nagiosapi:nagiosapi@localhost/ndoutils',
-		'production' => 'mysql://nagios:nagios@localhost/nagios'
+		'production' => 'mysql://nagiosapi:nagiosapi@localhost/nagios'
 	));
-
+	
+	$cfg->set_default_connection('production');
 });
 
 $hosts = Host::find('all');

@@ -18,6 +18,6 @@ class HostsController extends Controller {
 
 		$host = Host::find($id);
 	//	$host = Host::find($id, array('joins' => array('hoststatus', 'service')));
-		$this->send_response(200, $host->to_json(array('include' => array('hoststatus', 'service'))), 'application/json');	
+		$this->send_response(200, $host->to_json(array('include' => array('hoststatus', 'services'))), 'application/json');	
 	}
 }

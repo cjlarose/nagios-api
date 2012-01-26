@@ -1,5 +1,5 @@
 <?php
-class HostGroup extends ActiveRecord\Model {
+class Hostgroup extends ActiveRecord\Model {
 
 	static $table_name = 'nagios_hostgroups';
 

@@ -6,4 +6,5 @@ class Host extends ActiveRecord\Model {
 	static $primary_key = 'host_object_id';
 
 	static $has_one = array(array('hoststatus', 'foreign_key' => 'host_object_id'));
+	static $has_many = array(array('service', 'foreign_key' => 'host_object_id'));
 }

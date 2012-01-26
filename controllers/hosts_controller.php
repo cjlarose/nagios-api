@@ -16,7 +16,8 @@ class HostsController extends Controller {
 		if (empty($id))
 			exit();
 
-		$host = Host::find($id, array('joins' => array('hoststatus')));
-		$this->send_response(200, $host->to_json(array('include' => array('hoststatus'))), 'application/json');	
+		$host = Host::find($id);
+	//	$host = Host::find($id, array('joins' => array('hoststatus', 'service')));
+		$this->send_response(200, $host->to_json(array('include' => array('hoststatus', 'service'))), 'application/json');	
 	}
 }

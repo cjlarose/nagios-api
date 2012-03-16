@@ -10,7 +10,6 @@ class Controller {
 
 			$cfg->set_model_directory('models');
 			$cfg->set_connections(array(
-				'development' => 'mysql://nagiosapi:nagiosapi@localhost/ndoutils',
 				'production' => 'mysql://nagiosapi:nagiosapi@localhost/nagios'
 			));
 			

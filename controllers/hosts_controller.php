@@ -20,4 +20,15 @@ class HostsController extends Controller {
 	//	$host = Host::find($id, array('joins' => array('hoststatus', 'service')));
 		$this->send_response(200, $host->to_json(array('include' => array('hoststatus', 'services'))), 'application/json');	
 	}
+
+	function get_ips() {
+		$hosts = Host::find('all', array('select' => 'address'));
+		
+		$host_addresses = array();
+		foreach ($hosts as $host)
+			$host_addresses[] = $host->address;
+
+		$result_string = json_encode($host_addresses);
+		$this->send_response(200, $result_string, 'application/json');
+	}
 }
